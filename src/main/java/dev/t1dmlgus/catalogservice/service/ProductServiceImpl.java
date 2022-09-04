@@ -4,6 +4,7 @@ package dev.t1dmlgus.catalogservice.service;
 import dev.t1dmlgus.catalogservice.domain.Product;
 import dev.t1dmlgus.catalogservice.domain.ProductRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class ProductServiceImpl implements ProductService{
         this.productRepository = productRepository;
     }
 
+    @Transactional
     @Override
     public ProductInfo.ProductToken register(ProductCommand.Register productCommand) {
 
@@ -25,6 +27,7 @@ public class ProductServiceImpl implements ProductService{
         return ProductInfo.ProductToken.newInstance(save);
     }
 
+    @Transactional
     @Override
     public ProductInfo.ProductDetail inquire(String productToken) {
 
@@ -33,6 +36,7 @@ public class ProductServiceImpl implements ProductService{
         return ProductInfo.ProductDetail.newInstance(product);
     }
 
+    @Transactional
     @Override
     public List<ProductInfo.ProductDetail> inquireAll() {
 
