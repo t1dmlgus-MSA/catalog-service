@@ -5,6 +5,7 @@ import dev.t1dmlgus.catalogservice.common.common.response.CommonResponse;
 import dev.t1dmlgus.catalogservice.service.ProductCommand;
 import dev.t1dmlgus.catalogservice.service.ProductInfo;
 import dev.t1dmlgus.catalogservice.service.ProductService;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +15,23 @@ import java.util.List;
 @RequestMapping("/catalog-service")
 public class ProductController {
 
+    private final Environment env;
     private final ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(Environment env, ProductService productService) {
+        this.env = env;
         this.productService = productService;
     }
+
+    @GetMapping("/health-check")
+    public ResponseEntity<CommonResponse<String>> status(){
+
+        String healthCheckMessage =
+                String.format("Working Catalog-service on PORT %s", env.getProperty("local.server.port"));
+        CommonResponse<String> commonResponse = CommonResponse.of(healthCheckMessage);
+        return ResponseEntity.ok(commonResponse);
+    }
+
 
     @PostMapping("/products")
     public ResponseEntity<CommonResponse<ProductInfo.ProductToken>> registerProduct(@RequestBody ProductDto.Register productDto){
